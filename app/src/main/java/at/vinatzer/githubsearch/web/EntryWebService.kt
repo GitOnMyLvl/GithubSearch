@@ -6,11 +6,14 @@ import at.vinatzer.githubsearch.model.Repositories
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
+import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
 interface EntryWebService{
-    @GET("repositories?q=tetris+language:assembly&sort=stars&order=desc")
-    fun getAllEntries(): Call<Repositories>
+    @GET("repositories?")
+    fun getAllEntries(
+        @Query(value = "q") repositoryName: String
+    ): Call<Repositories>
 }
 
 fun createWebService(): EntryWebService {
