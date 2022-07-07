@@ -6,7 +6,7 @@ import at.vinatzer.githubsearch.model.Item
 class MainViewModel : ViewModel() {
     var pageNumber: Int = 1
     var query: String = ""
-    var entriesPerPage: Int = 20
+    var entriesPerPage: Int = 30
     var repoList: MutableList<Item> = mutableListOf()
     fun getResponse() = response.getResponse(query, pageNumber, entriesPerPage)
 }
