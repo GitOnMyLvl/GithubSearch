@@ -33,15 +33,15 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         binding.tvOwner.text = ("Owner: " + viewModel.getRepoOwner)
         binding.tvUrl.text = ("Url: " + viewModel.getRepoUrl)
 
-        if(viewModel.getRepoDescription != null) {
+        if (viewModel.getRepoDescription != null) {
             binding.tvDescription.text = ("Description: " + viewModel.getRepoDescription)
         }
 
-        binding.backButton.setOnClickListener(){
+        binding.backButton.setOnClickListener() {
             findNavController().navigate(DetailFragmentDirections.actionDetailFragmentToMainFragment())
         }
 
-        binding.tvUrl.setOnClickListener(){
+        binding.tvUrl.setOnClickListener() {
             val openURL = Intent(Intent.ACTION_VIEW)
             openURL.data = Uri.parse(viewModel.getRepoUrl)
             context?.startActivity(openURL)

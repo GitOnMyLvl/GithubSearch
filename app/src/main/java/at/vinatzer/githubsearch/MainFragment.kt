@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import at.vinatzer.githubsearch.adapter.ResultAdapter
 import at.vinatzer.githubsearch.databinding.FragmentMainBinding
 
-class MainFragment: Fragment(R.layout.fragment_main) {
+class MainFragment : Fragment(R.layout.fragment_main) {
     private lateinit var binding: FragmentMainBinding
     private lateinit var repoAdapter: ResultAdapter
     private lateinit var recyclerView: RecyclerView
@@ -21,7 +21,6 @@ class MainFragment: Fragment(R.layout.fragment_main) {
     private lateinit var scrollListener: RecyclerView.OnScrollListener
 
     private val viewModel: MainViewModel by viewModels()
-
 
 
     override fun onCreateView(
@@ -59,6 +58,7 @@ class MainFragment: Fragment(R.layout.fragment_main) {
         val response = viewModel.getResponse()
         response.observe(viewLifecycleOwner) { response ->
             response.items.let {
+                binding.loadingPanel.visibility = View.GONE
                 for (item in it) {
                     viewModel.repoList.add(item)
                 }
@@ -70,7 +70,7 @@ class MainFragment: Fragment(R.layout.fragment_main) {
             if (repoAdapter.itemCount == 0) {
                 Toast.makeText(
                     context,
-                    "no repositories found for the entered keyword",
+                    "No Result found! Search another Repository",
                     Toast.LENGTH_SHORT
                 ).show()
                 binding.loadingPanel.visibility = View.GONE
