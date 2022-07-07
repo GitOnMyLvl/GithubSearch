@@ -47,7 +47,4 @@
             android:indeterminate="true" />
     </RelativeLayout>
 
-
-
-
 </LinearLayout>

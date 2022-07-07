@@ -6,17 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import at.vinatzer.githubsearch.adapter.ResultAdapter
-import at.vinatzer.githubsearch.databinding.ActivityMainBinding
+import at.vinatzer.githubsearch.databinding.FragmentMainBinding
 
 class MainFragment: Fragment(R.layout.fragment_main) {
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: FragmentMainBinding
     private lateinit var repoAdapter: ResultAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: RecyclerView.LayoutManager
@@ -32,7 +31,7 @@ class MainFragment: Fragment(R.layout.fragment_main) {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = FragmentMainBinding.inflate(layoutInflater)
 
 
 
