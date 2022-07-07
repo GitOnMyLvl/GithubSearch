@@ -1,84 +1,77 @@
-package at.vinatzer.githubsearch.application
+package at.vinatzer.githubsearch
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import at.vinatzer.githubsearch.Response
 import at.vinatzer.githubsearch.adapter.ResultAdapter
-import at.vinatzer.githubsearch.model.Item
 import at.vinatzer.githubsearch.databinding.ActivityMainBinding
 
-
-class MainActivity : AppCompatActivity() {
+class MainFragment: Fragment(R.layout.fragment_main) {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var repoList: MutableList<Item>
     private lateinit var repoAdapter: ResultAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var scrollListener: RecyclerView.OnScrollListener
-    var pageNumber: Int = 1
-    lateinit var queryKeyword: String
 
-    @SuppressLint("CommitPrefEdits", "NotifyDataSetChanged")
+    private val viewModel: MainViewModel by viewModels()
+
+
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        repoList = mutableListOf()
+
 
         binding.loadingPanel.visibility = View.INVISIBLE
-        repoAdapter = ResultAdapter(repoList)
+        repoAdapter = ResultAdapter(viewModel.repoList)
         recyclerView = binding.viewResult
         recyclerView.adapter = repoAdapter
         val etSearchKeyword = binding.etKeyword
 
-        binding.search.setOnClickListener { repoList.clear()
+        binding.search.setOnClickListener {
+            viewModel.repoList.clear()
             repoAdapter.notifyDataSetChanged()
-            layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            queryKeyword = etSearchKeyword.text.toString()
-
-            val prefs = getSharedPreferences("Share", Context.MODE_PRIVATE)
-            val editor: SharedPreferences.Editor = prefs.edit()
-            editor.putString("queryKw", queryKeyword)
-            editor.putInt("pageNr", pageNumber)
-
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            viewModel.query = etSearchKeyword.text.toString()
+            viewModel.pageNumber = 1
             getRepositories()
         }
         setRecyclerViewScrollListener()
-
+        response = Response()
+        return binding.root
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+
     fun getRepositories() {
         binding.loadingPanel.visibility = View.VISIBLE
-        val prefs = getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE)
-        val prefQueryKeyword = prefs.getString("queryKw", queryKeyword)
-        val prefPageNumber = prefs.getInt("pageNr", pageNumber)
-
-        val response = Response().getResponse(prefQueryKeyword.toString(), prefPageNumber, 20)
-        response.observe(this) { response ->
+        val response = viewModel.getResponse()
+        response.observe(viewLifecycleOwner) { response ->
             response.items.let {
                 for (item in it) {
-                    repoList.add(item)
+                    viewModel.repoList.add(item)
                 }
             }
-            repoAdapter = ResultAdapter(repoList)
+            repoAdapter = ResultAdapter(viewModel.repoList)
             recyclerView.layoutManager = layoutManager
             repoAdapter.notifyDataSetChanged()
 
             if (repoAdapter.itemCount == 0) {
                 Toast.makeText(
-                    this,
+                    context,
                     "no repositories found for the entered keyword",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -94,20 +87,14 @@ class MainActivity : AppCompatActivity() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
-                    val prefs = getSharedPreferences("Share", Context.MODE_PRIVATE)
-                    val editor: SharedPreferences.Editor = prefs.edit()
-                    val oldPageNumber = prefs.getInt("pageNr", pageNumber)
-                    pageNumber = oldPageNumber + 1
-                    editor.putInt("pageNr", pageNumber)
+                    viewModel.pageNumber++
                     binding.loadingPanel.visibility = View.VISIBLE
                     getRepositories()
                     val recyclerViewState = recyclerView.layoutManager?.onSaveInstanceState()
                     recyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
-
                 }
             }
         }
         recyclerView.addOnScrollListener(scrollListener)
-
     }
 }

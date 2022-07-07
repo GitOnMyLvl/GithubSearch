@@ -10,7 +10,7 @@ import at.vinatzer.githubsearch.model.Repositories
 import at.vinatzer.githubsearch.web.ItemWebService
 import retrofit2.Call
 
-
+lateinit var response: at.vinatzer.githubsearch.Response
 
 class Response{
 
