@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">GithubSearch</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search">Search Git  Repository</string>
+    <string name="searchBtn">SEARCH</string>
+    <string name="backBtn">BACK</string>
+    <string name="infoBtn">INFO</string>
+    <string name="repoPlaceholder">Repository</string>
+    <string name="ownerPlaceholder">Owner</string>
+    <string name="descriptionPlaceholder">No Description found!</string>
+    <string name="urlPlaceholder">URL</string>
+    <string name="repoDetails">Repository Details</string>
 </resources>

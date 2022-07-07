@@ -3,7 +3,7 @@ package at.vinatzer.githubsearch
 import androidx.lifecycle.ViewModel
 import at.vinatzer.githubsearch.model.Item
 
-class MainViewModel: ViewModel() {
+class MainViewModel : ViewModel() {
     var pageNumber: Int = 1
     var query: String = ""
     var entriesPerPage: Int = 20

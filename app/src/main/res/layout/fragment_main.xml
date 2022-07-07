@@ -18,16 +18,16 @@
             android:id="@+id/etKeyword"
             android:layout_width="10dp"
             android:layout_height="match_parent"
-            android:layout_marginRight="5dp"
             android:layout_weight="4"
-            android:hint="Search" />
+            android:hint="@string/search"
+            android:autofillHints="Repository" />
 
         <Button
             android:id="@+id/search"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Search" />
+            android:text="@string/searchBtn" />
 
     </LinearLayout>
 
